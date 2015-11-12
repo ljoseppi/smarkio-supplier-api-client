@@ -83,6 +83,30 @@ $lead->addExtraField('nationality', 'portuguese');
 $response = $lead->send();
 ```
 
+## User custom API URL
+
+######European API URL (Default):
+
+```php
+$response = $lead->send();
+```
+or
+```php
+$response = $lead->send(Lead::API_BASE_URL_EU);
+```
+
+######Brazilian API URL:
+
+```php
+$response = $lead->send(Lead::API_BASE_URL_BR);
+```
+
+######Custom API URL:
+
+```php
+$response = $lead->send('https://api-custom-example.smark.io');
+```
+
 # Response format
 
 The response is a JSON containing at least a 'code' and 'message' fields. The code 200 indicates that the lead was integrated successfully.
