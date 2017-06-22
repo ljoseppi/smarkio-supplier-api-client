@@ -55,7 +55,30 @@ $lead = new Lead($api_token, $external_id, $campaign_external_id, $ip_address, $
 // send the Lead
 $response = $lead->send();
 ```
- 
+
+## Send a Lead with Files associated
+
+
+```php
+$api_token = 'YOUR API TOKEN HERE';
+$external_id = '1';
+$campaign_external_id = '98';
+$ip_address = '74.125.224.72';
+$email = 'dummy@example.net';
+$domain = 'mywebsite.example.net';
+
+// create Lead with mandatory parameters
+$lead = new Lead($api_token, $external_id, $campaign_external_id, $ip_address, $email, $domain);
+
+//Attach some files to it
+$lead->setFiles([
+    'photo' => "http://example.com/image.png",
+    'cc' => "http://example.com/cc.png"
+]);
+// send the Lead
+$response = $lead->send();
+```
+
 
 ## Send a Lead with additional fields
 
@@ -83,12 +106,82 @@ $lead->addExtraField('nationality', 'portuguese');
 $response = $lead->send();
 ```
 
+## Force new Lead creation
+
+If you want to force the creation of a new Lead, bypassing the conditions that would update an existing one, use the method setForceNewLeadCreation():
+
+```php
+$api_token = 'YOUR API TOKEN HERE';
+$external_id = '1';
+$campaign_external_id = '98';
+$ip_address = '74.125.224.72';
+$email = 'dummy@example.net';
+$domain = 'mywebsite.example.net';
+
+// create Lead with mandatory parameters
+$lead = new Lead($api_token, $external_id, $campaign_external_id, $ip_address, $email, $domain);
+
+// force new lead creation
+$lead->setForceNewLeadCreation(true);
+
+// send the Lead
+$response = $lead->send();
+```
+
+## Dump lead Info
+
+If you want to receive lead info on response, use the method setDumpLeadInfo():
+
+```php
+$api_token = 'YOUR API TOKEN HERE';
+$external_id = '1';
+$campaign_external_id = '98';
+$ip_address = '74.125.224.72';
+$email = 'dummy@example.net';
+$domain = 'mywebsite.example.net';
+
+// create Lead with mandatory parameters
+$lead = new Lead($api_token, $external_id, $campaign_external_id, $ip_address, $email, $domain);
+
+// dump lead info
+$lead->setDumpLeadInfo();
+
+// send the Lead
+$response = $lead->send();
+```
+
+In this case, the `$response` will contain a new field called `lead_info`.
+
+## User custom API URL
+
+###### European API URL (Default):
+
+```php
+$response = $lead->send();
+```
+or
+```php
+$response = $lead->send(Lead::API_BASE_URL_EU);
+```
+
+###### Brazilian API URL:
+
+```php
+$response = $lead->send(Lead::API_BASE_URL_BR);
+```
+
+###### Custom API URL:
+
+```php
+$response = $lead->send('https://api-custom-example.smark.io');
+```
+
 # Response format
 
 The response is a JSON containing at least a 'code' and 'message' fields. The code 200 indicates that the lead was integrated successfully.
 
 ```json
-{"code":"200","message":"OK","lead_id":"85177"}
+{"code":"200","message":"OK","lead_id":"85177", "smkid": "1:rLJGWJLW2mNNS2qq"}
 ```
 
 # Fields available
@@ -141,6 +234,9 @@ The following lead fields are available:
 | lead[rt_list_external_id]		    | Varchar(255)  | Optional       | |
 | lead[smk_category]		        | Varchar(255)  | Optional       | |
 | lead[smk_subcategory]		        | Varchar(255)  | Optional       | |
+| lead[smk_create_new]              | Int		    | Optional       | Use the value '1' to force the creation of a new lead |
+| lead[smk_dump_lead_info]          | Int		    | Optional       | Use the value '1' to receive lead info on response |
+| lead[files][filename]             | string        | Optional       | Values in this field will be uploaded and attached as files related to lead
 
 Extra parameters can be sent via:
 

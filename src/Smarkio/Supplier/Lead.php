@@ -78,6 +78,14 @@ class Lead
 
     }
 
+    public function setFiles($files){
+        $this->leadFields['files'] = $files;
+    }
+
+    public function getFiles(){
+        return isset($this->leadFields['files']) ? $this->leadFields['files'] : null;
+    }
+
     public function getExternalId()
     {
         return isset($this->leadFields['external_id']) ? $this->leadFields['external_id'] : null;
@@ -583,6 +591,40 @@ class Lead
     public function setSmkSubCategory($smk_subcategory)
     {
         $this->leadFields['smk_subcategory'] = $smk_subcategory;
+    }
+
+    public function isForceNewLeadCreation()
+    {
+        return isset($this->leadFields['smk_create_new']) && $this->leadFields['smk_create_new'] === "1";
+    }
+
+    public function setForceNewLeadCreation($forceNewLeadCreation = true)
+    {
+        if ($forceNewLeadCreation)
+        {
+            $this->leadFields['smk_create_new'] = "1";
+        }
+        else
+        {
+            unset($this->leadFields['smk_create_new']);
+        }
+    }
+
+    public function isDumpLeadInfo()
+    {
+        return isset($this->leadFields['smk_dump_lead_info']) && $this->leadFields['smk_dump_lead_info'] === "1";
+    }
+
+    public function setDumpLeadInfo($dumpLeadInfo = true)
+    {
+        if ($dumpLeadInfo)
+        {
+            $this->leadFields['smk_dump_lead_info'] = "1";
+        }
+        else
+        {
+            unset($this->leadFields['smk_dump_lead_info']);
+        }
     }
 
     public function addExtraField($fieldName, $fieldValue)
